@@ -2,6 +2,7 @@
   "expo": {
     "name": "E-Store",
     "slug": "E-Store",
+    "scheme": "estoreapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +26,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow E-Store to use Face ID for fast login."
+        }
+      ],
+      "expo-web-browser"
+    ]
   }
 }
