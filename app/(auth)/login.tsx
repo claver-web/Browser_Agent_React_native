@@ -78,9 +78,21 @@ export default function LoginScreen() {
       });
 
       if (result.success) {
-        // Biometrics verified. If there is an active session, root layout redirects them.
+        // Biometrics verified. Bypass Clerk and use Zustand store directly
+        useAuthStore.setState({
+          isAuthenticated: true,
+          user: {
+            id: "bio_user_123",
+            name: "Biometric User",
+            email: "biometric@estore.com",
+            phone: "+1234567890",
+            avatar: "",
+            addresses: [],
+            createdAt: new Date().toISOString(),
+          }
+        });
         Alert.alert("Success", "Biometrics verified successfully!");
-        router.replace("/(tabs)/home");
+        router.replace("/(tabs)");
       }
     } catch (error) {
       console.error("Biometrics failed:", error);
@@ -172,7 +184,7 @@ export default function LoginScreen() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        router.replace("/(tabs)/home");
+        router.replace("/(tabs)");
       } else {
         console.warn("Sign-in incomplete status:", result.status);
         Alert.alert("Incomplete", "Additional verification factors required.");
@@ -225,7 +237,7 @@ export default function LoginScreen() {
             <Text className="text-3xl font-interBold text-center text-secondary mb-2">
               {CONFIG.APP_NAME}
             </Text>
-            <Text className="text-sm font-inter text-center text-gray-500 mb-8">
+            <Text className="text-sm font-inter text-center text-text-secondary mb-8">
               Premium E-Store Application
             </Text>
 
@@ -235,7 +247,7 @@ export default function LoginScreen() {
                 <Text className="text-lg font-interBold text-gray-800 dark:text-gray-200 mb-2">
                   Login with Phone
                 </Text>
-                <View className="flex-row items-center border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2 mb-6">
+                <View className="flex-row items-center border border-gray-300 border-border rounded-xl px-4 py-2 mb-6">
                   {/* Country Code Picker Dropdown */}
                   <View className="mr-3 pr-2 border-r border-gray-300">
                     <Text className="text-base font-inter text-gray-800">{countryCode}</Text>
@@ -276,7 +288,7 @@ export default function LoginScreen() {
                   onPress={toggleBiometricsPreference}
                   className="mt-3 items-center"
                 >
-                  <Text className="text-xs text-gray-500 underline">
+                  <Text className="text-xs text-text-secondary underline">
                     {useBiometrics ? "Disable biometric login on startup" : "Enable biometric login on startup"}
                   </Text>
                 </TouchableOpacity>
@@ -287,7 +299,7 @@ export default function LoginScreen() {
                 <Text className="text-lg font-interBold text-gray-800 dark:text-gray-200 mb-2">
                   Verify OTP
                 </Text>
-                <Text className="text-xs text-gray-500 mb-6">
+                <Text className="text-xs text-text-secondary mb-6">
                   Enter the 6-digit code sent to {countryCode} {phoneNumber}
                 </Text>
 
@@ -304,7 +316,7 @@ export default function LoginScreen() {
                       value={digit}
                       onChangeText={(val) => handleOtpChange(val, idx)}
                       onKeyPress={(e) => handleOtpKeyPress(e, idx)}
-                      className="w-12 h-14 border border-gray-300 dark:border-gray-700 text-center text-xl font-interBold text-gray-800 rounded-xl bg-gray-50 dark:bg-darkBg"
+                      className="w-12 h-14 border border-gray-300 border-border text-center text-xl font-interBold text-gray-800 rounded-xl bg-gray-50 dark:bg-darkBg"
                     />
                   ))}
                 </View>
@@ -337,7 +349,7 @@ export default function LoginScreen() {
                     </Text>
                   </TouchableOpacity>
                   {timer > 0 && (
-                    <Text className="text-xs text-gray-500 font-inter">Resend in {timer}s</Text>
+                    <Text className="text-xs text-text-secondary font-inter">Resend in {timer}s</Text>
                   )}
                 </View>
 
@@ -346,7 +358,7 @@ export default function LoginScreen() {
                   onPress={() => setIsVerificationPending(false)}
                   className="mt-6 align-center"
                 >
-                  <Text className="text-sm text-center text-gray-500 underline font-inter">
+                  <Text className="text-sm text-center text-text-secondary underline font-inter">
                     Change Phone Number
                   </Text>
                 </TouchableOpacity>
@@ -354,7 +366,7 @@ export default function LoginScreen() {
             )}
 
             {/* Separator */}
-            <View className="h-[1px] bg-gray-200 dark:bg-gray-800 my-6" />
+            <View className="h-[1px] bg-gray-200 bg-surface my-6" />
 
             {/* Email Login Alternate */}
             <TouchableOpacity onPress={handleEmailLoginMock} className="items-center py-2 mb-4">
@@ -363,7 +375,7 @@ export default function LoginScreen() {
 
             {/* Register redirection */}
             <View className="flex-row justify-center items-center mt-2">
-              <Text className="text-xs text-gray-500 font-inter">New User? </Text>
+              <Text className="text-xs text-text-secondary font-inter">New User? </Text>
               <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
                 <Text className="text-xs text-primary font-interBold">Register</Text>
               </TouchableOpacity>

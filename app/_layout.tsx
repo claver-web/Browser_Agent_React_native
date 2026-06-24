@@ -9,6 +9,9 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { ClerkProvider, useAuth, useUser } from "@clerk/clerk-expo";
+import Toast from "react-native-toast-message";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { ActivityTracker } from "../components/ActivityTracker";
 import tokenCache from "../services/tokenCache";
 import { CONFIG } from "../constants/config";
 
@@ -21,7 +24,10 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <SafeAreaProvider>
-        <RootLayoutNav />
+        <ErrorBoundary>
+          <RootLayoutNav />
+          <Toast />
+        </ErrorBoundary>
       </SafeAreaProvider>
     </ClerkProvider>
   );
@@ -33,8 +39,13 @@ function RootLayoutNav() {
   const syncWithClerk = useAuthStore((state) => state.syncWithClerk);
   const loadBiometricPreference = useAuthStore((state) => state.loadBiometricPreference);
 
-  const { isLoaded: clerkLoaded, isSignedIn } = useAuth();
+  const { isLoaded: clerkLoaded, isSignedIn: clerkSignedIn } = useAuth();
   const { user: clerkUser } = useUser();
+  const isLocalAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  
+  // The user is signed in if they authenticated via Clerk OR via local biometrics
+  const isSignedIn = clerkSignedIn || isLocalAuthenticated;
+  
   const segments = useSegments();
   const router = useRouter();
 
@@ -62,12 +73,12 @@ function RootLayoutNav() {
 
     const inAuthGroup = segments[0] === "(auth)";
 
-    if (!isSignedIn && !inAuthGroup) {
-      // Redirect unauthenticated user to login screen
-      router.replace("/(auth)/login");
-    } else if (isSignedIn && inAuthGroup) {
+    if (isSignedIn && inAuthGroup) {
       // Redirect authenticated user away from auth group to tab home
-      router.replace("/(tabs)/home");
+      router.replace("/(tabs)");
+    } else if (segments.length === 0) {
+      // Redirect root to tab home
+      router.replace("/(tabs)");
     }
   }, [isSignedIn, clerkLoaded, fontsLoaded, segments, router]);
 
@@ -83,14 +94,19 @@ function RootLayoutNav() {
 
   return (
     <>
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false }}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <ActivityTracker />
+      <Stack 
+        screenOptions={{ 
+          headerShown: false,
+          animation: "slide_from_right"
+        }}
+      >
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="product/[id]" />
         <Stack.Screen name="checkout/index" />
-        <Stack.Screen name="order/index" />
-        <Stack.Screen name="order/[id]" />
+        <Stack.Screen name="order-success/[id]" />
       </Stack>
     </>
   );

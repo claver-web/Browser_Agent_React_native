@@ -1,83 +1,135 @@
-export interface Address {
-  id: string;
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  isDefault: boolean;
-}
-
 export interface User {
   id: string;
-  name: string;
+  clerkId: string;
   email: string;
-  phone: string;
-  avatar?: string;
-  addresses: Address[];
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
+  role: 'USER' | 'ADMIN';
   createdAt: string;
-}
-
-export interface Review {
-  id: string;
-  userId: string;
-  productId: string;
-  rating: number;
-  comment: string;
-  images?: string[];
-  createdAt: string;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  discountPrice?: number;
-  images: string[];
-  category: string;
-  brand: string;
-  rating: number;
-  reviews: Review[];
-  stock: number;
-  specifications?: Record<string, string>;
-  isFeatured: boolean;
-  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Category {
   id: string;
   name: string;
   slug: string;
-  image?: string;
-  productCount?: number;
-  subCategories?: Category[];
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  compareAtPrice?: number;
+  images: string[];
+  categoryId: string;
+  category?: Category;
+  inventoryQuantity: number;
+  isFeatured: boolean;
+  rating: number;
+  reviewCount: number;
+  specifications?: Record<string, string>;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CartItem {
+  id: string;
+  cartId: string;
   productId: string;
+  product?: Product;
   quantity: number;
-  size?: string;
-  color?: string;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Cart {
+  id: string;
+  userId?: string;
+  sessionId?: string;
+  items: CartItem[];
+  subtotal: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ShippingAddress {
+  fullName: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone: string;
 }
 
 export interface OrderItem {
+  id: string;
+  orderId: string;
   productId: string;
+  product?: Product;
   quantity: number;
-  size?: string;
-  color?: string;
   price: number;
-  name: string;
-  image?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Order {
   id: string;
   userId: string;
+  user?: User;
   items: OrderItem[];
-  totalAmount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  shippingAddress: string;
-  paymentId?: string;
+  status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+  subtotal: number;
+  shippingFee: number;
+  tax: number;
+  total: number;
+  shippingAddress: ShippingAddress;
+  paymentIntentId?: string;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  userId: string;
+  user?: User;
+  rating: number;
+  title?: string;
+  content: string;
+  isVerifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Comment {
+  id: string;
+  reviewId?: string;
+  productId?: string;
+  parentId?: string;
+  userId: string;
+  user?: User;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  success: boolean;
+}
+
+export interface ApiError {
+  message: string;
+  status: number;
+  errors?: Record<string, string[]>;
 }

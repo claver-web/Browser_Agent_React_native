@@ -117,7 +117,7 @@ export default function RegisterScreen() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        router.replace("/(tabs)/home");
+        router.replace("/(tabs)");
       } else {
         console.warn("Sign-up incomplete status:", result.status);
         Alert.alert("Incomplete", "Additional registration parameters required.");
@@ -165,7 +165,7 @@ export default function RegisterScreen() {
             <Text className="text-3xl font-interBold text-center text-secondary mb-2">
               {CONFIG.APP_NAME}
             </Text>
-            <Text className="text-sm font-inter text-center text-gray-500 mb-8">
+            <Text className="text-sm font-inter text-center text-text-secondary mb-8">
               Create a Premium E-Store Account
             </Text>
 
@@ -173,22 +173,22 @@ export default function RegisterScreen() {
               /* Registration Form */
               <View>
                 {/* Name */}
-                <Text className="text-sm font-interBold text-gray-700 dark:text-gray-300 mb-2">
+                <Text className="text-sm font-interBold text-text-secondary mb-2">
                   Full Name
                 </Text>
                 <TextInput
                   placeholder="Enter full name"
                   value={name}
                   onChangeText={setName}
-                  className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 mb-4 text-base font-inter text-gray-800"
+                  className="border border-gray-300 border-border rounded-xl px-4 py-3 mb-4 text-base font-inter text-gray-800"
                   placeholderTextColor="#9CA3AF"
                 />
 
                 {/* Phone number */}
-                <Text className="text-sm font-interBold text-gray-700 dark:text-gray-300 mb-2">
+                <Text className="text-sm font-interBold text-text-secondary mb-2">
                   Phone Number
                 </Text>
-                <View className="flex-row items-center border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2 mb-4">
+                <View className="flex-row items-center border border-gray-300 border-border rounded-xl px-4 py-2 mb-4">
                   <View className="mr-3 pr-2 border-r border-gray-300">
                     <Text className="text-base font-inter text-gray-800">{countryCode}</Text>
                   </View>
@@ -203,7 +203,7 @@ export default function RegisterScreen() {
                 </View>
 
                 {/* Email Address (optional) */}
-                <Text className="text-sm font-interBold text-gray-700 dark:text-gray-300 mb-2">
+                <Text className="text-sm font-interBold text-text-secondary mb-2">
                   Email Address (Optional)
                 </Text>
                 <TextInput
@@ -211,7 +211,7 @@ export default function RegisterScreen() {
                   keyboardType="email-address"
                   value={email}
                   onChangeText={setEmail}
-                  className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 mb-6 text-base font-inter text-gray-800"
+                  className="border border-gray-300 border-border rounded-xl px-4 py-3 mb-6 text-base font-inter text-gray-800"
                   placeholderTextColor="#9CA3AF"
                   autoCapitalize="none"
                 />
@@ -230,7 +230,7 @@ export default function RegisterScreen() {
                       <Text className="text-[10px] text-white font-interBold">✓</Text>
                     )}
                   </View>
-                  <Text className="text-xs text-gray-500 font-inter flex-1 leading-4">
+                  <Text className="text-xs text-text-secondary font-inter flex-1 leading-4">
                     I agree to the Terms & Conditions and Privacy Policy.
                   </Text>
                 </TouchableOpacity>
@@ -254,7 +254,7 @@ export default function RegisterScreen() {
                 <Text className="text-lg font-interBold text-gray-800 dark:text-gray-200 mb-2">
                   Verify Your Phone
                 </Text>
-                <Text className="text-xs text-gray-500 mb-6">
+                <Text className="text-xs text-text-secondary mb-6">
                   Enter the 6-digit code sent to {countryCode} {phoneNumber}
                 </Text>
 
@@ -271,7 +271,7 @@ export default function RegisterScreen() {
                       value={digit}
                       onChangeText={(val) => handleOtpChange(val, idx)}
                       onKeyPress={(e) => handleOtpKeyPress(e, idx)}
-                      className="w-12 h-14 border border-gray-300 dark:border-gray-700 text-center text-xl font-interBold text-gray-800 rounded-xl bg-gray-50 dark:bg-darkBg"
+                      className="w-12 h-14 border border-gray-300 border-border text-center text-xl font-interBold text-gray-800 rounded-xl bg-gray-50 dark:bg-darkBg"
                     />
                   ))}
                 </View>
@@ -304,18 +304,18 @@ export default function RegisterScreen() {
                     </Text>
                   </TouchableOpacity>
                   {timer > 0 && (
-                    <Text className="text-xs text-gray-500 font-inter">Resend in {timer}s</Text>
+                    <Text className="text-xs text-text-secondary font-inter">Resend in {timer}s</Text>
                   )}
                 </View>
               </View>
             )}
 
             {/* Separator */}
-            <View className="h-[1px] bg-gray-200 dark:bg-gray-800 my-6" />
+            <View className="h-[1px] bg-gray-200 bg-surface my-6" />
 
             {/* Login redirection */}
             <View className="flex-row justify-center items-center">
-              <Text className="text-xs text-gray-500 font-inter">Already have an account? </Text>
+              <Text className="text-xs text-text-secondary font-inter">Already have an account? </Text>
               <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
                 <Text className="text-xs text-primary font-interBold">Login</Text>
               </TouchableOpacity>

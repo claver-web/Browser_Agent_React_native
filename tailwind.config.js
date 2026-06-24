@@ -11,12 +11,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#FF6B35",
-        secondary: "#004E89",
-        accent: "#1A936F",
-        background: "#F7F7F2",
-        darkBg: "#1A1A2E",
-        darkCard: "#16213E",
+        background: "var(--background)",
+        surface: "var(--surface)",
+        'text-primary': "var(--text-primary)",
+        'text-secondary': "var(--text-secondary)",
+        border: "var(--border)",
+        primary: "var(--primary)",
       },
       fontFamily: {
         inter: ["Inter_400Regular"],
